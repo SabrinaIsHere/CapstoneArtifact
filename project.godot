@@ -11,8 +11,29 @@ config_version=5
 [application]
 
 config/name="Capstone Artifact"
-config/features=PackedStringArray("4.0", "Mobile")
+run/main_scene="res://Init/InitScene.tscn"
+config/features=PackedStringArray("4.0", "C#", "Mobile")
 config/icon="res://icon.svg"
+
+[autoload]
+
+GDShell="*res://addons/gdshell/scripts/gdshell_main.gd"
+
+[dotnet]
+
+project/assembly_name="Capstone Artifact"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/Todo_Manager/plugin.cfg", "res://addons/gdshell/plugin.cfg", "res://addons/gdlua/plugin.cfg")
+
+[input]
+
+gdshell_toggle_ui={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":96,"physical_keycode":0,"key_label":0,"unicode":0,"echo":false,"script":null)
+]
+}
 
 [rendering]
 

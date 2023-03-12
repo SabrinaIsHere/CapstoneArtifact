@@ -1,1 +1,2 @@
-# Capstone Artifact, for school
+# Capstone Artifact
+Project for school

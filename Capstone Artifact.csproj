@@ -1,0 +1,10 @@
+<Project Sdk="Godot.NET.Sdk/4.0.0">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <RootNamespace>CapstoneArtifact</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="NLua" Version="1.6.2" />
+  </ItemGroup>
+</Project>
