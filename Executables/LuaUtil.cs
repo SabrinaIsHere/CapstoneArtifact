@@ -5,7 +5,6 @@ using NLua;
 public partial class LuaUtil : Resource
 {
 	private Lua state;
-    private LuaFunction run;
 
 	public LuaUtil()
 	{
@@ -19,6 +18,7 @@ public partial class LuaUtil : Resource
         state.RegisterFunction("print", this, this.GetType().GetMethod("LuaPrint"));
 	}
 
+	// This is very much temporary and for debugging
     public void LuaPrint(string val)
     {
         GD.Print(val);
