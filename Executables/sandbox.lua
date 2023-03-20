@@ -1,5 +1,5 @@
 -- Libraries and bindings go here
-local env = ()
+local env = {}
 
 local function run(untrusted_code)
     if untrusted_code:byte(1) == 27 then return nil, "binary bytecode prohibited" end

@@ -25,7 +25,8 @@ func _init(filesystem: Filesystem, name: String = "", parent: Folder = null):
 	
 	# Assumes that the checks for this have already been made, either in
 	# add_object or otherwise
-	parent.children.append(self)
+	if parent:
+		parent.children.append(self)
 
 
 # Gets the path to this object without a slash at the end of the path
