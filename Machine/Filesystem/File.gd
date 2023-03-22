@@ -59,5 +59,8 @@ func get_content_as_text() -> String:
 
 
 # Executes this file as lua, returns an error message if there is one
-func execute() -> String:
-	return globals.Execute(get_content_as_text())
+func execute(p_globals: LuaGlobals = null) -> String:
+	if p_globals:
+		return p_globals.Execute(get_content_as_text())
+	else:
+		return globals.Execute(get_content_as_text())

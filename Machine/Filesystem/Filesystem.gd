@@ -30,3 +30,43 @@ func _init(machine: Machine):
 	# Initialize this from disk or create new default filesystem
 	root = Folder.new(self, "root", null)
 	root.add_object("evn", true)
+
+
+# Gets an object from a path. Returns null if it can't be found
+func get_object(path: String) -> FilesystemObject:
+	var parts = path.split("/", false)
+	var parent: Folder = root
+	var obj: FilesystemObject = null
+	for i in parts:
+		var temp_obj
+		if parent is Folder:
+			temp_obj = parent.get_object(i)
+		else: return null
+		
+		if temp_obj == null:
+			return null
+		
+		parent = temp_obj
+	return obj
+
+
+# Add a file at the given path. Return null if it could not
+func add_file(path: String) -> FilesystemObject:
+	# Note: untested
+	var parent_path = path.substr(0, path.rfind("/"))
+	var file_name = path.substr(path.rfind("/"), -1)
+	var parent = get_object(parent_path)
+	if parent and parent is Folder:
+		return parent.add_object(file_name, false)
+	else: return null
+
+
+# Adds a folder at the given path. Returns null if it could not
+func add_folder(path: String) -> FilesystemObject:
+	# Note: untested
+	var parent_path = path.substr(0, path.rfind("/"))
+	var file_name = path.substr(path.rfind("/"), -1)
+	var parent = get_object(parent_path)
+	if parent and parent is Folder:
+		return parent.add_object(file_name, true)
+	else: return null

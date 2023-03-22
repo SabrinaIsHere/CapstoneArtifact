@@ -68,12 +68,19 @@ func has_object(obj_name: String, is_folder: bool) -> bool:
 
 # Adds an object of the name and type designated. 
 # Returns true if successful, false if not.
-func add_object(obj_name: String, is_folder: bool) -> bool:
+func add_object(obj_name: String, is_folder: bool) -> FilesystemObject:
 	if not has_object(obj_name, is_folder):
 		if is_folder:
-			Folder.new(filesystem, obj_name, self)
+			return Folder.new(filesystem, obj_name, self)
 		else:
-			File.new(filesystem, obj_name, self)
-		return true
+			return File.new(filesystem, obj_name, self)
 	else:
-		return false
+		return null
+
+
+# Gets a child object from it's name. Returns null if it doesn't exist
+func get_object(obj_name: String) -> FilesystemObject:
+	for i in children:
+		if i.name == obj_name:
+			return i
+	return null

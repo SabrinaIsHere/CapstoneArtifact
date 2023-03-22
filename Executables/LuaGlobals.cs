@@ -18,6 +18,8 @@ public partial class LuaGlobals : Resource
     public Lua state;
     public string[] perms;
     public List<LuaLib> libs;
+    // List of strings executed before any lua code is run, to affect globals
+    public string[] args;
 
     public LuaGlobals()
     {
@@ -40,6 +42,21 @@ public partial class LuaGlobals : Resource
     public void ProcessPerms()
     {
         libs = new List<LuaLib>();
+
+        // If any of the perms are 'all', load all available libraries
+        foreach (string i in this.perms)
+        {
+            if (i.Equals("all"))
+            {
+                foreach (LuaLib j in LibRegistry)
+                {
+                    libs.Add(j);
+                }
+                return;
+            }
+        }
+
+        // Load libraries as requested in 'perms'
         foreach (string i in this.perms)
         {
             foreach (LuaLib j in LibRegistry)
@@ -68,6 +85,15 @@ public partial class LuaGlobals : Resource
     // Execute a string of lua code and return any error messages, if there are none null is returned
     public string Execute(string text)
     {
+        // Handle args
+        if (this.args != null && this.args.Length > 0)
+        {
+            foreach (string i in this.args)
+            {
+                state.DoString(i);
+            }
+        }
+
         string errorMsg = null;
         try {
             state.DoString(text);

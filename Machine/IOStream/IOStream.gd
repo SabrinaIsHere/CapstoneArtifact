@@ -9,10 +9,10 @@ signal new_output(output: String, waiting: int)
 const CIOStream = preload("res://Machine/IOStream/CIOStream.cs")
 
 
-var pop_event: Callable = func (new_value: String): return
-var push_event: Callable = func (given_value: String): return
+# The held output queue
 var output: Array[String] = []
 
+# The interface with the lua side of things
 var interface: CIOStream
 
 

@@ -25,7 +25,7 @@ project/assembly_name="Capstone Artifact"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/Todo_Manager/plugin.cfg", "res://addons/gdshell/plugin.cfg", "res://addons/gdlua/plugin.cfg")
+enabled=PackedStringArray("res://addons/Todo_Manager/plugin.cfg", "res://addons/gdshell/plugin.cfg")
 
 [input]
 
