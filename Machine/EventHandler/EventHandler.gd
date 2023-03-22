@@ -30,7 +30,7 @@ func update() -> void:
 	if evn_folder == null:
 		evn_folder = machine.filesystem.add_folder("/evn")
 		if evn_folder == null:
-			print("Error: could not find or create  'evn' folder [" + machine.name + "]")
+			print("Error: could not find or create 'evn' folder [" + machine.name + "]")
 			return
 	
 	for i in evn_folder.children:
@@ -41,11 +41,18 @@ func update() -> void:
 # Args is an array of lua code snippets executed before the event is triggered
 # Use args to effect the globals of the script
 func trigger(evn_name: String, evn_category: String, args: Array[String] = []) -> bool:
+	evn_name += ".lua"
 	var cat_folder = machine.filesystem.get_object("/evn/" + evn_category)
 	if cat_folder and cat_folder is Folder:
 		var file = cat_folder.get_object(evn_name)
 		if file and file is File:
 			self.globals.args = args
 			file.execute(self.globals)
+			return true
+	else:
+		var evn: FilesystemObject = machine.filesystem.get_object("/evn/" + evn_name)
+		if evn and evn is File:
+			self.globals.args = args
+			evn.execute(self.globals)
 			return true
 	return false;

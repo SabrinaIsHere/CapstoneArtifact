@@ -17,4 +17,8 @@ script = ExtResource("1_ea78f")
 [node name="Terminal" parent="." instance=ExtResource("2_a168r")]
 layout_mode = 1
 
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
 [connection signal="text_entered" from="Terminal" to="." method="_process_terminal_input"]
+[connection signal="timeout" from="Timer" to="." method="update"]

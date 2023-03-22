@@ -29,6 +29,10 @@ func _init(filesystem: Filesystem, name: String = "", parent: Folder = null):
 		parent.children.append(self)
 
 
+func _to_string():
+	return "Filesystem Object [" + get_path() + "]"
+
+
 # Gets the path to this object without a slash at the end of the path
 # if this is used with root it will return a blank string
 func get_path() -> String:
@@ -57,9 +61,10 @@ func delete() -> void:
 func update() -> void:
 	# Deletes this if it doesn't exist on the disk
 	# Updating data more specific to files or folders is done in the respective classes
-	var temp_dir = DirAccess.open(parent.get_objective_path())
-	if !(temp_dir.dir_exists(name) or temp_dir.file_exists(name)):
-		delete()
+	if parent:
+		var temp_dir = DirAccess.open(parent.get_objective_path())
+		if !(temp_dir.dir_exists(name) or temp_dir.file_exists(name)):
+			delete()
 
 
 # Updates disk to match this object

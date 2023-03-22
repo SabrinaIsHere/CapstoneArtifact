@@ -13,6 +13,7 @@ var dir: DirAccess
 
 # Machine components
 var filesystem: Filesystem
+var event_handler: EventHandler
 
 
 # Called when the node enters the scene tree for the first time.
@@ -32,6 +33,7 @@ func _ready():
 	
 	#OS.shell_open(ProjectSettings.globalize_path(path))
 	filesystem = Filesystem.new(self)
+	event_handler = EventHandler.new(self)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -39,6 +41,14 @@ func _process(delta):
 	pass
 
 
-# This is kind of defunct, I'm going to be replacing this with IOStreams at some point
-func _process_terminal_input(input: String) -> void:
-	pass
+# What happens when the user gives input
+# Consider moving this to IOStreams
+func _process_terminal_input(input: String, display: String) -> void:
+	event_handler.trigger("terminal_input", "input", ["
+		input = \"%s\"" % input])
+
+
+# Updates components in the machine, called once per second
+func update():
+	filesystem.update()
+	event_handler.update()

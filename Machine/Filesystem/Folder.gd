@@ -47,12 +47,15 @@ func update():
 		add_object(i, false)
 	
 	for i in children:
-		if !(child_dirs.has(i.name) or child_files.has(i.name)):
-			i.delete()
+		i.update()
 
 
 func save():
 	super()
+	if not dir.dir_exists(filesystem.path + get_path()):
+		if parent:
+			parent.save()
+		DirAccess.open(filesystem.path + parent.get_path()).make_dir(name)
 	for i in children:
 		i.save()
 
@@ -67,7 +70,8 @@ func has_object(obj_name: String, is_folder: bool) -> bool:
 
 
 # Adds an object of the name and type designated. 
-# Returns true if successful, false if not.
+# Returns null if the object cannot be added. If it exists already,
+# the object is returned
 func add_object(obj_name: String, is_folder: bool) -> FilesystemObject:
 	if not has_object(obj_name, is_folder):
 		if is_folder:
@@ -75,7 +79,11 @@ func add_object(obj_name: String, is_folder: bool) -> FilesystemObject:
 		else:
 			return File.new(filesystem, obj_name, self)
 	else:
-		return null
+		var obj = get_object(obj_name)
+		if obj is Folder and is_folder:
+			return obj
+		else:
+			return null
 
 
 # Gets a child object from it's name. Returns null if it doesn't exist
