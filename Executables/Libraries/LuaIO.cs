@@ -4,7 +4,12 @@ using Godot;
 
 public partial class LuaIO : LuaLib
 {
-    public LuaIO() : base("io") {}
+    CIOStream iostream;
+
+    public LuaIO(CIOStream iostream) : base("io") 
+    {
+        this.iostream = iostream;
+    }
 
     public override Lua Register(Lua state)
     {
@@ -23,7 +28,8 @@ public partial class LuaIO : LuaLib
 
     public void print(string value)
     {
-        // Will eventually move to IOStream
-        GD.Print(value);
+        // Good for debugging sometimes
+        //GD.Print(value);
+        this.iostream.push(value);
     }
 }

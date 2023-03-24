@@ -11,6 +11,9 @@ var path: String
 # Actual folder object
 var dir: DirAccess
 
+# Default terminal IOStream
+var terminal_iostream: IOStream
+
 # Machine components
 var filesystem: Filesystem
 var event_handler: EventHandler
@@ -20,6 +23,8 @@ var event_handler: EventHandler
 func _ready():
 	# Prepping lua execution
 	LuaUtil = LuaUtilClass.new()
+	
+	terminal_iostream = IOStream.new($Terminal)
 	
 	# Establishing machine data folder
 	path = "user://" + machine_name
@@ -43,7 +48,7 @@ func _process(delta):
 
 # What happens when the user gives input
 # Consider moving this to IOStreams
-func _process_terminal_input(input: String, display: String) -> void:
+func _process_terminal_input(input: String) -> void:
 	event_handler.trigger("terminal_input", "input", ["
 		input = \"%s\"" % input])
 

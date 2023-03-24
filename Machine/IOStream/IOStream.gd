@@ -1,12 +1,13 @@
 # This class mostly exists for the benefit of lua stuff later so that it can
 # more extensibly influence what happens to output. Basically, lua scripts'
 # output goes through an IOStream which lua scripts can control and do stuff with
-class_name IOSream extends Object
+class_name IOStream extends Object
 
 # waiting includes the output just added
 signal new_output(output: String, waiting: int)
 
 const CIOStream = preload("res://Machine/IOStream/CIOStream.cs")
+const Terminal = preload("res://UI/terminal.gd")
 
 
 # The held output queue
@@ -16,11 +17,14 @@ var output: Array[String] = []
 var interface: CIOStream
 
 
-func _init(interface: CIOStream = null):
+func _init(terminal: Terminal = null, interface: CIOStream = null):
+	if terminal:
+		new_output.connect(Callable(terminal, "handle_iostream"))
 	if interface:
 		self.interface = interface
 	else:
 		self.interface = CIOStream.new()
+		self.interface.init(self)
 
 
 # Adds new value to the end of the stream

@@ -17,7 +17,7 @@ var globals: LuaGlobals
 
 func _init(machine: Machine):
 	self.machine = machine
-	self.globals = LuaGlobals.new().init(false, ["all"])
+	self.globals = LuaGlobals.new().init(false, ["all"], machine.terminal_iostream)
 	self.event_categories = []
 	
 	# Init the event categories

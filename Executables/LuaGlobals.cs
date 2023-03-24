@@ -10,9 +10,7 @@ using System.Collections.Generic;
 public partial class LuaGlobals : Resource
 {
     // All usable libraries. This will be added according to the 'perms' array
-    public static LuaLib[] LibRegistry = new LuaLib[] {
-        new LuaIO()
-    };
+    public LuaLib[] LibRegistry;
 
     public bool isPersistant;
     public Lua state;
@@ -20,6 +18,7 @@ public partial class LuaGlobals : Resource
     public List<LuaLib> libs;
     // List of strings executed before any lua code is run, to affect globals
     public string[] args;
+    public CIOStream iostream;
 
     public LuaGlobals()
     {
@@ -28,10 +27,14 @@ public partial class LuaGlobals : Resource
 
     // You have to do intialization here instead of the constructor to handle
     // a weird quirk I'm having with instancing from GDScript
-    public LuaGlobals init(bool isPersistant, string[] perms)
+    public LuaGlobals init(bool isPersistant, string[] perms, GodotObject iostream)
     {
         this.isPersistant = isPersistant;
         this.perms = perms;
+        this.iostream = (CIOStream) iostream.Get("interface");
+        this.LibRegistry = new LuaLib[] {
+            new LuaIO(this.iostream)
+        };
         ProcessPerms();
         this.state = PrepState();
         return this;

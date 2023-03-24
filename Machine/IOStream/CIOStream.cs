@@ -6,6 +6,7 @@ public partial class CIOStream : Resource
 {
     private Lua state;
     private LuaTable luaObject;
+    public GodotObject gIOStream;
 
     public CIOStream()
     {
@@ -16,6 +17,30 @@ public partial class CIOStream : Resource
         /* Note: this object is meant to be passed to lua scripts for them to modify
            and define the methods 'PopEvent' and 'PushEvent'*/
         luaObject = InstanceTable();
+    }
+
+    // Get around godot being weird with parameters passed to constructors
+    public void init(GodotObject gIOStream)
+    {
+        this.gIOStream = gIOStream;
+    }
+
+    // For convenience
+    public void push(string value)
+    {
+        gIOStream.Call("push", value);
+    }
+
+    public string pop()
+    {
+        Variant ret_val = gIOStream.Call("pop");
+        if (ret_val.AsString() != null)
+        {
+            return ret_val.AsString();
+        } else
+        {
+            return "";
+        }
     }
 
     public LuaTable InstanceTable()

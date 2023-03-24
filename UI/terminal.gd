@@ -1,6 +1,6 @@
 extends ColorRect
 
-signal text_entered(text: String, displayed: String)
+signal text_entered(text: String)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -14,11 +14,15 @@ func _process(delta):
 
 # Output text to the terminal
 func output(text: String) -> void:
-	var display: String = "\n" + $VBoxContainer/InputContainer/InputPrefix.text + " " + text
-	$VBoxContainer/Output.append_text(display)
-	emit_signal("text_entered", text, display)
+	$VBoxContainer/Output.append_text(text + "\n")
+
+
+func handle_iostream(value: String, size: int) -> void:
+	output(value)
 
 
 func input(text: String) -> void:
-	output(text)
+	var display: String = $VBoxContainer/InputContainer/InputPrefix.text + " " + text + "\n"
+	$VBoxContainer/Output.append_text(display)
 	$VBoxContainer/InputContainer/Input.clear()
+	emit_signal("text_entered", text)

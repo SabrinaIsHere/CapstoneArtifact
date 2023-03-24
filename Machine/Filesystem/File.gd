@@ -15,7 +15,7 @@ var content_type: String
 func _init(filesystem: Filesystem, name: String, parent: Folder):
 	super(filesystem, name, parent)
 	
-	globals = LuaGlobals.new().init(false, ["io"])
+	globals = LuaGlobals.new().init(false, ["io"], filesystem.machine.terminal_iostream)
 	
 	# Get the actual object or create it
 	var obj_path = filesystem.path + get_path()
@@ -30,11 +30,6 @@ func _init(filesystem: Filesystem, name: String, parent: Folder):
 	
 	# Get the content of the object
 	content = file.get_as_text().split("\n")
-	
-	
-	# Debug, remove later
-	if name == "ex.lua":
-		print(self.execute())
 
 
 func update() -> void:
