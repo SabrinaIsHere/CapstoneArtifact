@@ -1,6 +1,7 @@
 # This class mostly exists for the benefit of lua stuff later so that it can
 # more extensibly influence what happens to output. Basically, lua scripts'
 # output goes through an IOStream which lua scripts can control and do stuff with
+# Also, probably should have just done all of this in C#
 class_name IOStream extends Object
 
 # waiting includes the output just added

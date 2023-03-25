@@ -91,6 +91,8 @@ public partial class LuaGlobals : Resource
         // Handle args
         if (this.args != null && this.args.Length > 0)
         {
+            // Establish default location for passed args. Can be ignored
+            state.DoString("args = {}");
             foreach (string i in this.args)
             {
                 state.DoString(i);

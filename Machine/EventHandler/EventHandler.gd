@@ -41,18 +41,27 @@ func update() -> void:
 # Args is an array of lua code snippets executed before the event is triggered
 # Use args to effect the globals of the script
 func trigger(evn_name: String, evn_category: String, args: Array[String] = []) -> bool:
-	evn_name += ".lua"
 	var cat_folder = machine.filesystem.get_object("/evn/" + evn_category)
 	if cat_folder and cat_folder is Folder:
-		var file = cat_folder.get_object(evn_name)
+		var file = cat_folder.get_object(evn_name + ".lua")
 		if file and file is File:
 			self.globals.args = args
+			execute_event_script(evn_name, evn_category, args)
 			file.execute(self.globals)
 			return true
 	else:
-		var evn: FilesystemObject = machine.filesystem.get_object("/evn/" + evn_name)
+		var evn: FilesystemObject = machine.filesystem.get_object("/evn/" + evn_name + ".lua")
 		if evn and evn is File:
 			self.globals.args = args
+			execute_event_script(evn_name, evn_category, args)
 			evn.execute(self.globals)
 			return true
 	return false;
+
+
+# This tries to execute a script at /evn/evn.lua every time an event is triggered
+func execute_event_script(evn_name: String, evn_category: String, args: Array[String]) -> void:
+	var script: FilesystemObject = machine.filesystem.get_object("/evn/evn.lua")
+	if script and script is File:
+		script.execute(self.globals)
+		self.globals.args = args

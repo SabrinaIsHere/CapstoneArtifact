@@ -50,7 +50,7 @@ func _process(delta):
 # Consider moving this to IOStreams
 func _process_terminal_input(input: String) -> void:
 	event_handler.trigger("terminal_input", "input", ["
-		input = \"%s\"" % input])
+		args.input = \"%s\"" % input])
 
 
 # Updates components in the machine, called once per second
