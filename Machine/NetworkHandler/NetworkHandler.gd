@@ -18,6 +18,11 @@ func _init(machine: Machine, network: Network = null):
 		self.network.add_object(self)
 
 
+# Formats the sender code of this device, mainly used for packets
+func format_sender_code() -> String:
+	return str(network.id) + "/" + str(id)
+
+
 # Function that handles a new packet being sent to this machine
 func packet_received(packet: Packet) -> void:
 	machine.event_handler.trigger("packet_received", "network", [packet.ToArg()])

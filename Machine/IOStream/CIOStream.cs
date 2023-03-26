@@ -16,7 +16,7 @@ public partial class CIOStream : Resource
         // New lua instance of this object
         /* Note: this object is meant to be passed to lua scripts for them to modify
            and define the methods 'PopEvent' and 'PushEvent'*/
-        luaObject = InstanceTable();
+        luaObject = InstanceTable(state);
     }
 
     // Get around godot being weird with parameters passed to constructors
@@ -43,23 +43,34 @@ public partial class CIOStream : Resource
         }
     }
 
-    public LuaTable InstanceTable()
+    public LuaTable InstanceTable(Lua state)
     {
         state.NewTable("IOStream");
+        state.DoString(@"IOStream = {
+            push_event = function(value) end,
+            pop_event = function(value) end}");
         LuaTable ret = state.GetTable("IOStream");
+        state["IOStream"] = null;
         return ret;
     }
 
     // These methods are called by the gdscript 'IOStream' object
     public string PopEvent(string newValue)
     {
-        LuaFunction func = luaObject["PopEvent"] as LuaFunction;
+        LuaFunction func = luaObject["pop_event"] as LuaFunction;
         if (func != null)
         {
-            var ret = (string) func.Call(newValue)[0] as string;
-            if (ret != null && ret is string)
+            Object[] ret;
+            try {
+                ret = func.Call(newValue);
+            } catch (Exception e)
             {
-                return ret;
+                GD.Print(e.ToString());
+                return e.ToString();
+            }
+            if (ret != null && ret.Length > 0 && ret[0] is string)
+            {
+                return (string) ret[0];
             }
         }
         return null;
@@ -67,13 +78,20 @@ public partial class CIOStream : Resource
 
     public string PushEvent(string givenValue)
     {
-        LuaFunction func = luaObject["PushEvent"] as LuaFunction;
+        LuaFunction func = luaObject["push_event"] as LuaFunction;
         if (func != null)
         {
-            var ret = func.Call(givenValue)[0] as string;
-            if (ret != null && ret is string)
+            Object[] ret;
+            try {
+                ret = func.Call(givenValue);
+            } catch (Exception e)
             {
-                return ret;
+                GD.Print(e.ToString());
+                return e.ToString();
+            }
+            if (ret != null && ret.Length > 0 && ret[0] is string)
+            {
+                return (string) ret[0];
             }
         }
         return null;

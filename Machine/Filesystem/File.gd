@@ -14,8 +14,10 @@ var content_type: String
 
 func _init(filesystem: Filesystem, name: String, parent: Folder):
 	super(filesystem, name, parent)
+	self.type = "file"
 	
-	globals = LuaGlobals.new().init(false, ["io"], filesystem.machine.terminal_iostream)
+	var machine = filesystem.machine
+	globals = LuaGlobals.new().init(false, ["io"], machine.terminal_iostream, machine)
 	
 	# Get the actual object or create it
 	var obj_path = filesystem.path + get_path()

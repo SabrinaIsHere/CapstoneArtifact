@@ -27,13 +27,18 @@ public partial class LuaGlobals : Resource
 
     // You have to do intialization here instead of the constructor to handle
     // a weird quirk I'm having with instancing from GDScript
-    public LuaGlobals init(bool isPersistant, string[] perms, GodotObject iostream)
+    public LuaGlobals init(bool isPersistant, string[] perms, GodotObject iostream, GodotObject machine)
     {
+        // for the benefit of library initialization
+        this.state = new Lua();
         this.isPersistant = isPersistant;
         this.perms = perms;
         this.iostream = (CIOStream) iostream.Get("interface");
         this.LibRegistry = new LuaLib[] {
-            new LuaIO(this.iostream)
+            new LuaIO(this, this.iostream),
+            new LuaFilesystem(this, machine.Get("filesystem").AsGodotObject()),
+            new LuaEvent(this, machine.Get("event_handler").AsGodotObject()),
+            new LuaNetwork(this, machine.Get("network_handler").AsGodotObject())
         };
         ProcessPerms();
         this.state = PrepState();
@@ -104,6 +109,7 @@ public partial class LuaGlobals : Resource
             state.DoString(text);
         } catch (Exception e) {
             errorMsg = e.ToString();
+            iostream.push(errorMsg);
         }
 
         if (!isPersistant)

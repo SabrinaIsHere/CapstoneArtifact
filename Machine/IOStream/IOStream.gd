@@ -17,9 +17,13 @@ var output: Array[String] = []
 # The interface with the lua side of things
 var interface: CIOStream
 
+# The terminal this is attached to, if it is attached to one
+var terminal: Terminal
+
 
 func _init(terminal: Terminal = null, interface: CIOStream = null):
 	if terminal:
+		self.terminal = terminal
 		new_output.connect(Callable(terminal, "handle_iostream"))
 	if interface:
 		self.interface = interface

@@ -17,6 +17,7 @@ var terminal_iostream: IOStream
 # Machine components
 var filesystem: Filesystem
 var event_handler: EventHandler
+var network_handler: NetworkHandler
 
 
 # Called when the node enters the scene tree for the first time.
@@ -39,6 +40,8 @@ func _ready():
 	#OS.shell_open(ProjectSettings.globalize_path(path))
 	filesystem = Filesystem.new(self)
 	event_handler = EventHandler.new(self)
+	
+	event_handler.trigger("boot", "machine", [])
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

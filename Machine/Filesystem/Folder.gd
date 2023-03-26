@@ -10,6 +10,7 @@ var is_root: bool
 
 func _init(filesystem: Filesystem, name: String, parent: Folder):
 	super(filesystem, name, parent)
+	self.type = "folder"
 	if not parent:
 		is_root = true
 

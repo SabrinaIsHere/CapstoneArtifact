@@ -2,7 +2,9 @@ class_name FilesystemObject extends Object
 
 # The filesystem managing this file
 var filesystem: Filesystem
-# Filename
+# The type of this object
+var type: String
+# Object name
 var name: String
 # Path the root of this object's filesystem
 var master_path: String
@@ -13,6 +15,7 @@ var parent: Folder
 
 
 func _init(filesystem: Filesystem, name: String = "", parent: Folder = null):
+	self.type = "object"
 	self.name = name
 	self.parent = parent
 	self.filesystem = filesystem
