@@ -30,4 +30,7 @@ func packet_received(packet: Packet) -> void:
 
 # Send a packet across this network
 func send_packet(packet: Packet) -> bool:
+	if packet.receiver == "localhost":
+		packet_received(packet)
+		return true
 	return network.route_packet(packet)

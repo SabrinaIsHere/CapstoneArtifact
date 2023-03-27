@@ -2,6 +2,13 @@ extends ColorRect
 
 signal text_entered(text: String)
 
+
+# Handles pressing the key up or down in the terminal to go through
+# previously entered commands
+var entries_index = 1
+var entries: Array[String] = []
+
+
 # Get the text displayed before the area where the user is able to type
 func get_prefix() -> String:
 	return $VBoxContainer/InputContainer/InputPrefix.text
@@ -19,6 +26,9 @@ func get_output() -> String:
 
 # Set the text being displayed on screen
 func set_output(val: String) -> void:
+	if val.is_empty():
+		$VBoxContainer/Output.clear()
+		return
 	$VBoxContainer/Output.text = val
 
 
@@ -42,8 +52,23 @@ func handle_iostream(value: String, size: int) -> void:
 
 
 func input(text: String) -> void:
-	# Going to be handled in lua
-#	var display: String = $VBoxContainer/InputContainer/InputPrefix.text + " " + text + "\n"
-#	$VBoxContainer/Output.append_text(display)
-#	$VBoxContainer/InputContainer/Input.clear()
+	entries.append(text)
+	entries_index = entries.size()
 	emit_signal("text_entered", text)
+
+
+# This function was not fun to write
+func _on_input_gui_input(event):
+	if event is InputEventKey:
+		if event.pressed:
+			if event.keycode == KEY_UP:
+				if entries_index - 1 >= 0 and entries.size() > 0:
+					entries_index -= 1
+					set_input(entries[entries_index])
+			elif event.keycode == KEY_DOWN:
+				if entries_index + 1 < entries.size():
+					entries_index += 1
+					set_input(entries[entries_index])
+				else:
+					entries_index = entries.size()
+					set_input("")

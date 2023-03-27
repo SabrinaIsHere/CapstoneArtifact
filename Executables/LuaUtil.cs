@@ -4,35 +4,27 @@ using NLua;
 
 public partial class LuaUtil : Resource
 {
-	private Lua state;
-
-	public LuaUtil()
+	public static LuaTable ArrayToTable(Lua state, Object[] list)
 	{
-        // New state
-		state = new Lua();
-
-        // Remove outside libraries
-        state.DoString("_ENV = {}");
-
-        // Load game library bindings
-        state.RegisterFunction("print", this, this.GetType().GetMethod("LuaPrint"));
+		state.NewTable("temp_table");
+		LuaTable table = state.GetTable("temp_table");
+		state["temp_table"] = null;
+		for (int i = 0; i < list.Length; i++)
+		{
+			table[i + 1] = list[i];
+		}
+		return table;
 	}
 
-	// This is very much temporary and for debugging
-    public void LuaPrint(string val)
-    {
-        GD.Print(val);
-    }
-
-	public void ExecuteString(string exe)
+	public static LuaTable ArrayToTable(Lua state, int[] list)
 	{
-		GD.Print("ExecuteString called");
-		state.DoString(exe);
-	}
-
-	public object[] ExecuteScript(string path)
-	{
-		GD.Print("Executing " + path + "...");
-		return state.DoFile(path);
+		state.NewTable("temp_table");
+		LuaTable table = state.GetTable("temp_table");
+		state["temp_table"] = null;
+		for (int i = 0; i < list.Length; i++)
+		{
+			table[i + 1] = list[i];
+		}
+		return table;
 	}
 }

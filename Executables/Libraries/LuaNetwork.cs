@@ -1,5 +1,5 @@
 using Godot;
-using Godot.Collections;
+using System;
 using System.Collections.Generic;
 using NLua;
 
@@ -22,7 +22,8 @@ public partial class LuaNetwork : LuaLib
 
     public bool SendPacket(string receiver, int port, string payload)
     {
-        Packet packet = new Packet().init(
+        Packet packet = new Packet();
+        packet.init(
             networkHandler.Call("format_sender_code").AsString(),
             receiver,
             port,
@@ -32,7 +33,7 @@ public partial class LuaNetwork : LuaLib
     }
 
     // If I get around to multiple networks, add a field for network id and have it search peers
-    public int[] IndexNetwork()
+    public LuaTable IndexNetwork()
     {
         GodotObject network = networkHandler.Get("network").AsGodotObject();
         List<int> tags = new List<int>();
@@ -41,6 +42,6 @@ public partial class LuaNetwork : LuaLib
         {
             tags.Add(i.Get("id").AsInt32());
         }
-        return tags.ToArray();
+        return LuaUtil.ArrayToTable(state, tags.ToArray());
     }
 }

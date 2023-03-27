@@ -12,6 +12,11 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_6twrx")
 
+[node name="Machine1" parent="." instance=ExtResource("2_0e4st")]
+visible = false
+layout_mode = 1
+machine_name = "ExternalMachine"
+
 [node name="Machine" parent="." instance=ExtResource("2_0e4st")]
 layout_mode = 1
 machine_name = "TestMachine"

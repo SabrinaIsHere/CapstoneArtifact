@@ -41,7 +41,13 @@ public partial class LuaIO : LuaLib
     {
         // Good for debugging sometimes
         //GD.Print(value);
-        this.iostream.push(value.ToString());
+        if (value == null)
+        {
+            this.iostream.push("nil");
+        } else 
+        {
+            this.iostream.push(value.ToString());
+        }
     }
 
     // Terminal functions
@@ -73,7 +79,7 @@ public partial class LuaIO : LuaLib
 
     public void SetTerminalPrefix(string prefix)
     {
-        this.terminal.Call("set_terminal_prefix", prefix);
+        this.terminal.Call("set_prefix", prefix);
     }
 
     public string GetTerminalOutput()

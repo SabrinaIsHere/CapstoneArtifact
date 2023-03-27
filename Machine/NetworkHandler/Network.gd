@@ -23,6 +23,7 @@ func add_object(obj: NetworkHandler) -> bool:
 			return false
 	objects.append(obj)
 	obj.id = objects.size() - 1
+	obj.network = self
 	return true
 
 
@@ -30,8 +31,12 @@ func add_object(obj: NetworkHandler) -> bool:
 # Note, is not yet equipped to handle peer networks
 func route_packet(packet: Packet) -> bool:
 	var temp_arr: PackedStringArray = packet.receiver.split("/")
-	var net_id: int = temp_arr[0].to_int()
-	var obj_id: int = temp_arr[1].to_int()
+	
+	var net_id: int = -1
+	var obj_id: int = packet.sender.split("/")[1].to_int()
+	if temp_arr.size() == 2:
+		net_id = temp_arr[0].to_int()
+		obj_id = temp_arr[1].to_int()
 	
 	if net_id == -1 or net_id == self.id:
 		# Object is in this network

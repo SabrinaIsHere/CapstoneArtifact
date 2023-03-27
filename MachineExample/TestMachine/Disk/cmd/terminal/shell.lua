@@ -1,0 +1,1 @@
+globals.set_shell(true)

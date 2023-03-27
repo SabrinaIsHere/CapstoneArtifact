@@ -39,6 +39,7 @@ func _ready():
 	
 	#OS.shell_open(ProjectSettings.globalize_path(path))
 	filesystem = Filesystem.new(self)
+	network_handler = NetworkHandler.new(self)
 	event_handler = EventHandler.new(self)
 	
 	event_handler.trigger("boot", "machine", [])
@@ -52,6 +53,7 @@ func _process(delta):
 # What happens when the user gives input
 # Consider moving this to IOStreams
 func _process_terminal_input(input: String) -> void:
+	input = input.replace("\"", "\\\"")
 	event_handler.trigger("terminal_input", "input", ["
 		args.input = \"%s\"" % input])
 

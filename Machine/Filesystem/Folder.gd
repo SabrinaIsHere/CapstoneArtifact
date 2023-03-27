@@ -64,6 +64,8 @@ func save():
 # Checks for whether or not the folder contains an object of the name
 # and type designated
 func has_object(obj_name: String, is_folder: bool) -> bool:
+	if obj_name == "." or obj_name == "..":
+		return true
 	for i in children:
 		if (i.name == obj_name) and (is_folder == i is Folder):
 			return true
@@ -89,7 +91,16 @@ func add_object(obj_name: String, is_folder: bool) -> FilesystemObject:
 
 # Gets a child object from it's name. Returns null if it doesn't exist
 func get_object(obj_name: String) -> FilesystemObject:
+	if obj_name == ".":
+		return self
+	elif obj_name == ".." and parent:
+		return parent
 	for i in children:
 		if i.name == obj_name:
 			return i
 	return null
+
+
+# Opens this folder on the host computer's file browser
+func open() -> void:
+	OS.shell_open(ProjectSettings.globalize_path(get_objective_path()))

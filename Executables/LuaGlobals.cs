@@ -19,6 +19,7 @@ public partial class LuaGlobals : Resource
     // List of strings executed before any lua code is run, to affect globals
     public string[] args;
     public CIOStream iostream;
+    public LuaTable scriptGlobals;
 
     public LuaGlobals()
     {
@@ -38,10 +39,13 @@ public partial class LuaGlobals : Resource
             new LuaIO(this, this.iostream),
             new LuaFilesystem(this, machine.Get("filesystem").AsGodotObject()),
             new LuaEvent(this, machine.Get("event_handler").AsGodotObject()),
-            new LuaNetwork(this, machine.Get("network_handler").AsGodotObject())
+            new LuaNetwork(this, machine.Get("network_handler").AsGodotObject()),
+            new LuaMachine(this, machine)
         };
         ProcessPerms();
         this.state = PrepState();
+        this.state.NewTable("globals");
+        this.scriptGlobals = state.GetTable("globals");
         return this;
     }
 
@@ -81,17 +85,17 @@ public partial class LuaGlobals : Resource
     // Sets up a new, clean state
     public Lua PrepState()
     {
-        Lua tempState = new Lua();
-        tempState.DoString("_ENV = {}");
+        state.DoString("_ENV = {}");
         foreach (LuaLib i in this.libs)
         {
-            i.Register(tempState);
+            i.Register(state);
         }
-        return tempState;
+        state["globals"] = scriptGlobals;
+        return state;
     }
 
     // Execute a string of lua code and return any error messages, if there are none null is returned
-    public string Execute(string text)
+    public string Execute(string text, bool keep_state)
     {
         // Handle args
         if (this.args != null && this.args.Length > 0)
@@ -109,14 +113,24 @@ public partial class LuaGlobals : Resource
             state.DoString(text);
         } catch (Exception e) {
             errorMsg = e.ToString();
+            if (!iostream.gIOStream.Get("terminal").Equals(null))
+            {
+                errorMsg = "[color=#fc0202]" + errorMsg + "[/color]";
+            }
             iostream.push(errorMsg);
         }
 
-        if (!isPersistant)
+        if (!isPersistant || !keep_state)
         {
+            this.scriptGlobals = this.state.GetTable("globals");
             this.state = PrepState();
         }
         
         return errorMsg;
+    }
+
+    public string Execute(string text)
+    {
+        return Execute(text, false);
     }
 }

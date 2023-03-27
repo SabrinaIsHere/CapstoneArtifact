@@ -36,6 +36,7 @@ func _init(filesystem: Filesystem, name: String, parent: Folder):
 
 func update() -> void:
 	super()
+	file = FileAccess.open(get_objective_path(), FileAccess.READ_WRITE)
 	content = file.get_as_text().split("\n")
 
 
@@ -49,10 +50,12 @@ func save() -> void:
 
 # Makes the 'content' array into a plaintext string
 func get_content_as_text() -> String:
+	update()
 	var ret_val: String = ""
 	for i in content:
 		ret_val += i + "\n"
 	return ret_val.trim_suffix("\n")
+
 
 
 # Executes this file as lua, returns an error message if there is one

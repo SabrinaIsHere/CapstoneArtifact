@@ -9,6 +9,11 @@ public partial class Packet : Resource
     public int port;
     public string payload;
 
+    public Packet()
+    {
+
+    }
+
     // Sender format 'NetworkID/ObjectID'. NetworkID is -1 if it's on the same network as receiver
     public Packet init(string sender, string receiver, int port, string payload)
     {
@@ -34,11 +39,11 @@ public partial class Packet : Resource
     // This is made to interface with the args system in LuaGlobals
     public string ToArg()
     {
-        return String.Format(@"args.packet = {
-            sender = {0},
-            receiver = {1},
-            port = {2},
-            payload = {3},
-        }", new Object[] {sender, receiver, port, payload});
+        return "args.packet = {" +
+            "sender = '" + sender + "'," +
+            "receiver = '" + receiver + "'," +
+            "port = " + port.ToString() + "," +
+            "payload = '" + payload + "'," +
+        "}";
     }
 }

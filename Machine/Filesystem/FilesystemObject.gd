@@ -54,10 +54,9 @@ func get_objective_path() -> String:
 func delete() -> void:
 	if parent:
 		parent.children.erase(self)
-		DirAccess.open(parent.get_path()).remove(name)
-		self.free()
+		DirAccess.open(parent.get_objective_path()).remove(name)
 	else:
-		print("Error: Attempted to erase assumed root object [" + name + "]")
+		print("Error: Attempted to erase root object [" + name + "]")
 
 
 # Updates object to match the disk partner

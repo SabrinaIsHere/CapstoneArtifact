@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://buo8e3p8hcgkf"]
+[gd_scene load_steps=8 format=3 uid="uid://buo8e3p8hcgkf"]
 
 [ext_resource type="Script" path="res://UI/terminal.gd" id="1_p2715"]
 
@@ -9,8 +9,14 @@ RichTextLabel/styles/focus = SubResource("StyleBoxEmpty_qpyhx")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kgshc"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6rj4q"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p2o68"]
+
 [sub_resource type="Theme" id="Theme_4gye5"]
 LineEdit/styles/focus = SubResource("StyleBoxEmpty_kgshc")
+LineEdit/styles/normal = SubResource("StyleBoxEmpty_6rj4q")
+LineEdit/styles/read_only = SubResource("StyleBoxEmpty_p2o68")
 
 [node name="Terminal" type="ColorRect"]
 anchors_preset = 15
@@ -34,6 +40,7 @@ layout_mode = 2
 size_flags_vertical = 3
 focus_mode = 2
 theme = SubResource("Theme_cwfjl")
+bbcode_enabled = true
 scroll_following = true
 context_menu_enabled = true
 selection_enabled = true
@@ -41,14 +48,18 @@ selection_enabled = true
 [node name="InputContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="InputPrefix" type="Label" parent="VBoxContainer/InputContainer"]
+[node name="InputPrefix" type="RichTextLabel" parent="VBoxContainer/InputContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-text = ">"
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+shortcut_keys_enabled = false
 
 [node name="Input" type="LineEdit" parent="VBoxContainer/InputContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = SubResource("Theme_4gye5")
 
+[connection signal="gui_input" from="VBoxContainer/InputContainer/Input" to="." method="_on_input_gui_input"]
 [connection signal="text_submitted" from="VBoxContainer/InputContainer/Input" to="." method="input"]

@@ -42,7 +42,7 @@ func get_object(path: String) -> FilesystemObject:
 	if path.strip_edges() == "/":
 		return root
 	var parts = path.split("/", false)
-	var parent: Folder = root
+	var parent: FilesystemObject = root
 	var obj: FilesystemObject = null
 	for i in parts:
 		var temp_obj
